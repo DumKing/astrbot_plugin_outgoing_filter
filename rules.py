@@ -29,10 +29,10 @@ class Rule:
     replace: Callable[[str], tuple[str, int]]
 
     def skip_reason(self, umo: str) -> str:
-        if any(fnmatchcase(umo, pattern) for pattern in self.deny):
-            return "命中 UMO 黑名单"
-        if self.allow and not any(fnmatchcase(umo, pattern) for pattern in self.allow):
-            return "未命中 UMO 白名单"
+        if any(fnmatchcase(umo, pattern) for pattern in self.allow):
+            return "命中 UMO 白名单，放行"
+        if not any(fnmatchcase(umo, pattern) for pattern in self.deny):
+            return "未命中 UMO 黑名单，放行"
         return ""
 
     def applies(self, umo: str) -> bool:

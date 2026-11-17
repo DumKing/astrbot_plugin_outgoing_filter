@@ -35,14 +35,14 @@
             "type": "list",
             "default": [],
             "_special": "umo",
-            "hint": "留空时匹配所有会话，支持 * 通配符。"
+            "hint": "命中时跳过本规则，优先于黑名单。支持 * 通配符。"
           },
           "umo_deny": {
             "description": "UMO 黑名单",
             "type": "list",
             "default": [],
             "_special": "umo",
-            "hint": "命中则跳过本规则，优先于白名单。"
+            "hint": "仅命中时处理；留空时本规则不处理任何会话。支持 * 通配符。"
           },
           "words": {
             "description": "词条",
@@ -87,14 +87,14 @@
             "type": "list",
             "default": [],
             "_special": "umo",
-            "hint": "留空时匹配所有会话，支持 * 通配符。"
+            "hint": "命中时跳过本规则，优先于黑名单。支持 * 通配符。"
           },
           "umo_deny": {
             "description": "UMO 黑名单",
             "type": "list",
             "default": [],
             "_special": "umo",
-            "hint": "命中则跳过本规则，优先于白名单。"
+            "hint": "仅命中时处理；留空时本规则不处理任何会话。支持 * 通配符。"
           },
           "domain_mode": {
             "description": "域名策略",
@@ -157,14 +157,14 @@
             "type": "list",
             "default": [],
             "_special": "umo",
-            "hint": "留空时匹配所有会话，支持 * 通配符。"
+            "hint": "命中时跳过本规则，优先于黑名单。支持 * 通配符。"
           },
           "umo_deny": {
             "description": "UMO 黑名单",
             "type": "list",
             "default": [],
             "_special": "umo",
-            "hint": "命中则跳过本规则，优先于白名单。"
+            "hint": "仅命中时处理；留空时本规则不处理任何会话。支持 * 通配符。"
           },
           "pattern": {
             "description": "Python 正则表达式",

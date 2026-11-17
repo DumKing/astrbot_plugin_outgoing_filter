@@ -10,7 +10,6 @@ class OutgoingFilter(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
         self.rules = []
-        self.debug_logs = config.get("debug_logs", False)
         if config.get("enabled", True):
             for index, raw in enumerate(config.get("rules", []), 1):
                 if not raw.get("enabled", True):
@@ -22,8 +21,7 @@ class OutgoingFilter(Star):
                 except (ValueError, KeyError, TypeError) as exc:
                     logger.warning(f"[出站文本过滤] 第 {index} 条规则无效，已跳过 ({type(exc).__name__})")
 
-        if self.debug_logs:
-            logger.info(f"[出站文本过滤] 已加载 {len(self.rules)} 条有效规则")
+        logger.debug(f"[出站文本过滤] 已加载 {len(self.rules)} 条有效规则")
 
     @filter.on_decorating_result()
     async def filter_outgoing(self, event: AstrMessageEvent):
@@ -38,8 +36,7 @@ class OutgoingFilter(Star):
         umo = event.unified_msg_origin
         for label, rule in self.rules:
             if reason := rule.skip_reason(umo):
-                if self.debug_logs:
-                    logger.info(f"[出站文本过滤] {umo} {label} 跳过：{reason}")
+                logger.debug(f"[出站文本过滤] {umo} {label} 跳过：{reason}")
                 continue
             updated = []
             matches = 0
@@ -52,9 +49,8 @@ class OutgoingFilter(Star):
                 updated.append((index, text))
             texts = updated
             stop = bool(matches and rule.stop)
-            if self.debug_logs:
-                suffix = "，停止后续规则" if stop else ""
-                logger.info(f"[出站文本过滤] {umo} {label} 命中 {matches} 处{suffix}")
+            suffix = "，停止后续规则" if stop else ""
+            logger.debug(f"[出站文本过滤] {umo} {label} 命中 {matches} 处{suffix}")
             if stop:
                 break
 

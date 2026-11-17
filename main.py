@@ -60,7 +60,8 @@ class OutgoingFilter(Star):
 
         if changed:
             for index, text in reversed(texts):
-                if text.strip():
-                    result.chain[index].text = text
-                else:
-                    del result.chain[index]
+                if text != result.chain[index].text:
+                    if text:
+                        result.chain[index].text = text
+                    else:
+                        del result.chain[index]

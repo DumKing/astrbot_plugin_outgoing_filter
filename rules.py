@@ -6,9 +6,11 @@ import re
 from typing import Callable
 from urllib.parse import urlsplit
 
-URL = r"(?:https?://[^\s<>\"'\x60\[\]）】。，！？；、]+|(?:[\w-]+\.)+[a-z]{2,}(?::\d+)?(?:/[^\s<>\"'\x60\[\]）】。，！？；、]*)?)"
+URL_CHAR = r"[^\s<>\"'\x60\[\]()（）【】。，！？；、]"
+URL_PART = rf"(?:{URL_CHAR}|\({URL_CHAR}*\))"
+URL = rf"(?:https?://{URL_PART}+|(?:[\w-]+\.)+[a-z]{{2,}}(?::\d+)?(?:[/?#]{URL_PART}*)?)"
 LINK = re.compile(
-    rf"\[(?P<label>[^\]\n]+)\]\((?P<markdown>{URL})\)|(?<![\w@.])(?P<plain>{URL})",
+    rf"\[(?P<label>[^\]\n]+)\]\((?P<markdown>{URL})\)|(?P<plain>https?://{URL_PART}+|(?<![\w@.]){URL})",
     re.IGNORECASE,
 )
 
@@ -55,8 +57,6 @@ def link_replacer(raw: dict, replacement: str):
             plain = match.group("plain")
             url = plain or match.group("markdown")
             clean = url.rstrip(".,;:!?")
-            while clean.endswith(")") and clean.count(")") > clean.count("("):
-                clean = clean[:-1]
             host = host_of(clean)
             parts = host.split(".")
             listed = host in domains or (

@@ -113,7 +113,7 @@
             "description": "域名列表",
             "type": "list",
             "default": [],
-            "hint": "填写域名，例如 bilibili.com。"
+            "hint": "填写域名，例如 bilibili.com。名单为空时，「替换名单外链接」处理所有识别到的链接，「替换名单内链接」无命中。"
           },
           "subdomains": {
             "description": "包含子域名",

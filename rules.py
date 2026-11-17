@@ -41,7 +41,7 @@ class Rule:
 
 def link_replacer(raw: dict, replacement: str):
     domains = frozenset(host_of(domain.strip()) for domain in raw.get("domains", []))
-    if not domains or "" in domains:
+    if "" in domains:
         raise ValueError("请填写有效的域名列表")
     subdomains = raw.get("subdomains", True)
     whitelist = raw.get("domain_mode") == "allow"

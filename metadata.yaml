@@ -1,0 +1,6 @@
+name: astrbot_plugin_outgoing_filter
+display_name: 出站文本过滤
+desc: 按 UMO 和规则顺序替换待发送消息的文本。
+version: 0.1.0
+author: DumKing
+astrbot_version: ">=4.29.4,<5"

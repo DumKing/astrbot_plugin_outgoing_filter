@@ -1,0 +1,188 @@
+{
+  "enabled": {
+    "description": "启用发送前过滤",
+    "type": "bool",
+    "default": true
+  },
+  "rules": {
+    "description": "规则列表",
+    "type": "template_list",
+    "default": [],
+    "hint": "按列表顺序处理，后面的规则读取前面替换后的文本。",
+    "templates": {
+      "text": {
+        "name": "文本 / 违禁词",
+        "display_item": "name",
+        "items": {
+          "name": {
+            "description": "规则名称",
+            "type": "string",
+            "default": ""
+          },
+          "enabled": {
+            "description": "启用规则",
+            "type": "bool",
+            "default": true
+          },
+          "umo_allow": {
+            "description": "UMO 白名单",
+            "type": "list",
+            "default": [],
+            "_special": "umo",
+            "hint": "留空时匹配所有会话，支持 * 通配符。"
+          },
+          "umo_deny": {
+            "description": "UMO 黑名单",
+            "type": "list",
+            "default": [],
+            "_special": "umo",
+            "hint": "命中则跳过本规则，优先于白名单。"
+          },
+          "words": {
+            "description": "词条",
+            "type": "list",
+            "default": [],
+            "hint": "按字面匹配。同一位置有多个词条时优先匹配较长词。"
+          },
+          "replacement": {
+            "description": "替换文本",
+            "type": "string",
+            "default": "***",
+            "hint": "留空表示删除。"
+          },
+          "case_sensitive": {
+            "description": "区分大小写",
+            "type": "bool",
+            "default": false
+          },
+          "stop_on_match": {
+            "description": "命中后停止后续规则",
+            "type": "bool",
+            "default": false
+          }
+        }
+      },
+      "link": {
+        "name": "链接",
+        "display_item": "name",
+        "items": {
+          "name": {
+            "description": "规则名称",
+            "type": "string",
+            "default": ""
+          },
+          "enabled": {
+            "description": "启用规则",
+            "type": "bool",
+            "default": true
+          },
+          "umo_allow": {
+            "description": "UMO 白名单",
+            "type": "list",
+            "default": [],
+            "_special": "umo",
+            "hint": "留空时匹配所有会话，支持 * 通配符。"
+          },
+          "umo_deny": {
+            "description": "UMO 黑名单",
+            "type": "list",
+            "default": [],
+            "_special": "umo",
+            "hint": "命中则跳过本规则，优先于白名单。"
+          },
+          "domain_mode": {
+            "description": "域名策略",
+            "type": "string",
+            "default": "deny",
+            "options": [
+              "deny",
+              "allow"
+            ],
+            "labels": [
+              "替换名单内链接",
+              "替换名单外链接"
+            ]
+          },
+          "domains": {
+            "description": "域名列表",
+            "type": "list",
+            "default": [],
+            "hint": "填写域名，例如 bilibili.com。"
+          },
+          "subdomains": {
+            "description": "包含子域名",
+            "type": "bool",
+            "default": true
+          },
+          "replacement": {
+            "description": "替换文本",
+            "type": "string",
+            "default": "",
+            "hint": "留空表示删除。"
+          },
+          "keep_label": {
+            "description": "保留 Markdown 链接标题",
+            "type": "bool",
+            "default": true
+          },
+          "stop_on_match": {
+            "description": "命中后停止后续规则",
+            "type": "bool",
+            "default": false
+          }
+        }
+      },
+      "regex": {
+        "name": "正则表达式",
+        "display_item": "name",
+        "items": {
+          "name": {
+            "description": "规则名称",
+            "type": "string",
+            "default": ""
+          },
+          "enabled": {
+            "description": "启用规则",
+            "type": "bool",
+            "default": true
+          },
+          "umo_allow": {
+            "description": "UMO 白名单",
+            "type": "list",
+            "default": [],
+            "_special": "umo",
+            "hint": "留空时匹配所有会话，支持 * 通配符。"
+          },
+          "umo_deny": {
+            "description": "UMO 黑名单",
+            "type": "list",
+            "default": [],
+            "_special": "umo",
+            "hint": "命中则跳过本规则，优先于白名单。"
+          },
+          "pattern": {
+            "description": "Python 正则表达式",
+            "type": "string",
+            "default": ""
+          },
+          "replacement": {
+            "description": "替换文本",
+            "type": "string",
+            "default": "",
+            "hint": "按字面插入，留空表示删除。"
+          },
+          "case_sensitive": {
+            "description": "区分大小写",
+            "type": "bool",
+            "default": false
+          },
+          "stop_on_match": {
+            "description": "命中后停止后续规则",
+            "type": "bool",
+            "default": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -10,14 +10,20 @@ class OutgoingFilter(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
         self.rules = []
+        self.debug_logs = config.get("debug_logs", False)
         if config.get("enabled", True):
             for index, raw in enumerate(config.get("rules", []), 1):
                 if not raw.get("enabled", True):
                     continue
                 try:
-                    self.rules.append(compile_rule(raw))
+                    rule = compile_rule(raw)
+                    label = f"#{index} [{raw['__template_key']}] {raw.get('name', '')}".strip()
+                    self.rules.append((label, rule))
                 except (ValueError, KeyError, TypeError) as exc:
-                    logger.warning("出站文本过滤第 %s 条规则无效，已跳过 (%s)", index, type(exc).__name__)
+                    logger.warning(f"[出站文本过滤] 第 {index} 条规则无效，已跳过 ({type(exc).__name__})")
+
+        if self.debug_logs:
+            logger.info(f"[出站文本过滤] 已加载 {len(self.rules)} 条有效规则")
 
     @filter.on_decorating_result()
     async def filter_outgoing(self, event: AstrMessageEvent):
@@ -29,20 +35,27 @@ class OutgoingFilter(Star):
             return
 
         changed = False
-        for rule in self.rules:
-            if not rule.applies(event.unified_msg_origin):
+        umo = event.unified_msg_origin
+        for label, rule in self.rules:
+            if reason := rule.skip_reason(umo):
+                if self.debug_logs:
+                    logger.info(f"[出站文本过滤] {umo} {label} 跳过：{reason}")
                 continue
             updated = []
-            matched = False
+            matches = 0
             for index, text in texts:
                 if text:
                     new_text, count = rule.replace(text)
-                    matched |= bool(count)
+                    matches += count
                     changed |= new_text != text
                     text = new_text
                 updated.append((index, text))
             texts = updated
-            if matched and rule.stop:
+            stop = bool(matches and rule.stop)
+            if self.debug_logs:
+                suffix = "，停止后续规则" if stop else ""
+                logger.info(f"[出站文本过滤] {umo} {label} 命中 {matches} 处{suffix}")
+            if stop:
                 break
 
         if changed:

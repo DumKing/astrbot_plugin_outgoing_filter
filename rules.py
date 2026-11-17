@@ -28,10 +28,15 @@ class Rule:
     stop: bool
     replace: Callable[[str], tuple[str, int]]
 
+    def skip_reason(self, umo: str) -> str:
+        if any(fnmatchcase(umo, pattern) for pattern in self.deny):
+            return "命中 UMO 黑名单"
+        if self.allow and not any(fnmatchcase(umo, pattern) for pattern in self.allow):
+            return "未命中 UMO 白名单"
+        return ""
+
     def applies(self, umo: str) -> bool:
-        return not any(fnmatchcase(umo, p) for p in self.deny) and (
-            not self.allow or any(fnmatchcase(umo, p) for p in self.allow)
-        )
+        return not self.skip_reason(umo)
 
 
 def link_replacer(raw: dict, replacement: str):

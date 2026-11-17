@@ -4,6 +4,12 @@
     "type": "bool",
     "default": true
   },
+  "debug_logs": {
+    "description": "输出规则调试日志",
+    "type": "bool",
+    "default": false,
+    "hint": "在 AstrBot 日志中显示 UMO、规则序号和类型、跳过原因与命中次数。"
+  },
   "rules": {
     "description": "规则列表",
     "type": "template_list",
